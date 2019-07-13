@@ -1,0 +1,167 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/3fdf28bc/
+ACTIONS	../game.py	/^ACTIONS=4$/;"	kind:variable	line:46
+ADDNEWBADDIERATE	../game.py	/^ADDNEWBADDIERATE = 6$/;"	kind:variable	line:40
+BACKGROUNDCOLOR	../game.py	/^BACKGROUNDCOLOR = (0, 0, 0)$/;"	kind:variable	line:36
+BADDIEMAXSPEED	../game.py	/^BADDIEMAXSPEED = 8$/;"	kind:variable	line:39
+BADDIEMINSPEED	../game.py	/^BADDIEMINSPEED = 8$/;"	kind:variable	line:38
+EXPLORE	../game.py	/^EXPLORE = 5000. # frames over which to anneal epsilon$/;"	kind:variable	line:45
+FINAL_EPSILON	../game.py	/^FINAL_EPSILON = 0.05 # final value of epsilon$/;"	kind:variable	line:53
+FPS	../game.py	/^FPS = 10$/;"	kind:variable	line:37
+GAMMA	../game.py	/^GAMMA = 0.99 # decay rate of past observations$/;"	kind:variable	line:55
+GameState	../pong.py	/^class GameState:$/;"	kind:class	line:40
+HIT_REWARD	../pong.py	/^HIT_REWARD = 1$/;"	kind:variable	line:35
+INITIAL_EPSILON	../game.py	/^INITIAL_EPSILON = 1.0 # starting value of epsilon$/;"	kind:variable	line:54
+LOSE_REWARD	../pong.py	/^LOSE_REWARD = -1$/;"	kind:variable	line:36
+OBSERVE	../game.py	/^OBSERVE = 5000. # timesteps to observe before training$/;"	kind:variable	line:44
+PLAYERMOVERATE	../game.py	/^PLAYERMOVERATE = 5$/;"	kind:variable	line:41
+REPLAY_MEMORY	../game.py	/^REPLAY_MEMORY=10000$/;"	kind:variable	line:43
+SCORE_REWARD	../pong.py	/^SCORE_REWARD = 0$/;"	kind:variable	line:37
+TEXTCOLOR	../game.py	/^TEXTCOLOR = (255, 255, 255)$/;"	kind:variable	line:35
+WINDOWHEIGHT	../game.py	/^WINDOWHEIGHT = 600$/;"	kind:variable	line:34
+WINDOWWIDTH	../game.py	/^WINDOWWIDTH = 800$/;"	kind:variable	line:33
+__init__	../pong.py	/^    def __init__(self):$/;"	kind:member	line:41
+a_t	../game.py	/^        a_t = np.zeros([ACTIONS])$/;"	kind:variable	line:228
+action_index	../game.py	/^            action_index = np.argmax(readout_t)$/;"	kind:variable	line:236
+action_index	../game.py	/^            action_index = random.randrange(ACTIONS)$/;"	kind:variable	line:231
+action_index	../game.py	/^        action_index = 0$/;"	kind:variable	line:229
+ai_speed	../pong.py	/^ai_speed = 15.$/;"	kind:variable	line:33
+autopep8	../venv/bin/autopep8	1;"	kind:file	line:1
+back	../pong.py	/^back = pygame.Surface((640, 480))$/;"	kind:variable	line:19
+background	../pong.py	/^background = back.convert()$/;"	kind:variable	line:20
+baddieAddCounter	../game.py	/^            baddieAddCounter = 0$/;"	kind:variable	line:270
+baddieAddCounter	../game.py	/^    baddieAddCounter = 0$/;"	kind:variable	line:219
+baddieImage	../game.py	/^baddieImage = pygame.image.load('image\/car2.png')$/;"	kind:variable	line:195
+baddieSize	../game.py	/^            baddieSize = 30$/;"	kind:variable	line:271
+baddies	../game.py	/^    baddies = []$/;"	kind:variable	line:214
+bar	../pong.py	/^bar = pygame.Surface((10, 50))$/;"	kind:variable	line:22
+bar1	../pong.py	/^bar1 = bar.convert()$/;"	kind:variable	line:23
+bar2	../pong.py	/^bar2 = bar.convert()$/;"	kind:variable	line:25
+build_model	../game.py	/^def build_model():$/;"	kind:function	line:98
+calc_points	../game.py	/^def calc_points(state, done):$/;"	kind:function	line:72
+car3	../game.py	/^car3 = pygame.image.load('image\/car3.png')$/;"	kind:variable	line:192
+car4	../game.py	/^car4 = pygame.image.load('image\/car4.png')$/;"	kind:variable	line:193
+circ	../pong.py	/^circ = pygame.draw.circle(circ_sur, (255, 255, 255), (int(15 \/ 2), int(15 \/ 2)), int(15 \/ 2))$/;"	kind:variable	line:28
+circ_sur	../pong.py	/^circ_sur = pygame.Surface((15, 15))$/;"	kind:variable	line:27
+circle	../pong.py	/^circle = circ_sur.convert()$/;"	kind:variable	line:29
+count	../game.py	/^count=3$/;"	kind:variable	line:42
+drawText	../game.py	/^def drawText(text, font, surface, x, y):$/;"	kind:function	line:168
+easy_install	../venv/bin/easy_install	1;"	kind:file	line:1
+easy_install-3.7	../venv/bin/easy_install-3.7	1;"	kind:file	line:1
+epsilon	../game.py	/^epsilon = 1.0  # exploration rate$/;"	kind:variable	line:49
+epsilon_decay	../game.py	/^epsilon_decay = 0.995$/;"	kind:variable	line:51
+epsilon_min	../game.py	/^epsilon_min = 0.01$/;"	kind:variable	line:50
+epylint	../venv/bin/epylint	1;"	kind:file	line:1
+f	../game.py	/^    f=open("data\/save.dat",'w')$/;"	kind:variable	line:203
+f2py	../venv/bin/f2py	1;"	kind:file	line:1
+f2py3	../venv/bin/f2py3	1;"	kind:file	line:1
+f2py3.7	../venv/bin/f2py3.7	1;"	kind:file	line:1
+font	../game.py	/^font = pygame.font.SysFont(None, 30)$/;"	kind:variable	line:182
+font	../pong.py	/^font = pygame.font.SysFont("calibri", 40)$/;"	kind:variable	line:31
+frame_step	../pong.py	/^    def frame_step(self, input_vect):$/;"	kind:member	line:49
+freeze_graph	../venv/bin/freeze_graph	1;"	kind:file	line:1
+g	../game.py	/^                g = open("data\/save.dat", 'w')$/;"	kind:variable	line:339
+game.py	../game.py	1;"	kind:file	line:1
+gamma	../game.py	/^gamma = 0.95  # discount rate$/;"	kind:variable	line:48
+h	../game.py	/^        w, h = im.shape$/;"	kind:variable	line:350
+im	../game.py	/^        im = 255 * (position_board \/ position_board.max())$/;"	kind:variable	line:349
+iptest	../venv/bin/iptest	1;"	kind:file	line:1
+iptest3	../venv/bin/iptest3	1;"	kind:file	line:1
+ipython	../venv/bin/ipython	1;"	kind:file	line:1
+ipython3	../venv/bin/ipython3	1;"	kind:file	line:1
+isort	../venv/bin/isort	1;"	kind:file	line:1
+isympy	../venv/bin/isympy	1;"	kind:file	line:1
+jsonschema	../venv/bin/jsonschema	1;"	kind:file	line:1
+jupyter	../venv/bin/jupyter	1;"	kind:file	line:1
+jupyter-bundlerextension	../venv/bin/jupyter-bundlerextension	1;"	kind:file	line:1
+jupyter-console	../venv/bin/jupyter-console	1;"	kind:file	line:1
+jupyter-kernel	../venv/bin/jupyter-kernel	1;"	kind:file	line:1
+jupyter-kernelspec	../venv/bin/jupyter-kernelspec	1;"	kind:file	line:1
+jupyter-migrate	../venv/bin/jupyter-migrate	1;"	kind:file	line:1
+jupyter-nbconvert	../venv/bin/jupyter-nbconvert	1;"	kind:file	line:1
+jupyter-nbextension	../venv/bin/jupyter-nbextension	1;"	kind:file	line:1
+jupyter-notebook	../venv/bin/jupyter-notebook	1;"	kind:file	line:1
+jupyter-qtconsole	../venv/bin/jupyter-qtconsole	1;"	kind:file	line:1
+jupyter-run	../venv/bin/jupyter-run	1;"	kind:file	line:1
+jupyter-serverextension	../venv/bin/jupyter-serverextension	1;"	kind:file	line:1
+jupyter-troubleshoot	../venv/bin/jupyter-troubleshoot	1;"	kind:file	line:1
+jupyter-trust	../venv/bin/jupyter-trust	1;"	kind:file	line:1
+learning_rate	../game.py	/^learning_rate = 0.001$/;"	kind:variable	line:52
+mainClock	../game.py	/^mainClock = pygame.time.Clock()$/;"	kind:variable	line:176
+markdown_py	../venv/bin/markdown_py	1;"	kind:file	line:1
+max_diff_x	../game.py	/^                max_diff_x = abs(relative_position[0])$/;"	kind:variable	line:304
+max_diff_x	../game.py	/^max_diff_x = math.floor(600\/scale_down_factor)$/;"	kind:variable	line:59
+max_diff_y	../game.py	/^                max_diff_y = abs(relative_position[1])$/;"	kind:variable	line:308
+max_diff_y	../game.py	/^max_diff_y = math.floor(700\/scale_down_factor)$/;"	kind:variable	line:60
+memory	../game.py	/^memory = deque(maxlen=2000)$/;"	kind:variable	line:47
+model	../game.py	/^model = build_model()$/;"	kind:variable	line:145
+moveDown	../game.py	/^            moveDown = False$/;"	kind:variable	line:249
+moveDown	../game.py	/^            moveDown = True$/;"	kind:variable	line:253
+moveLeft	../game.py	/^            moveLeft = False$/;"	kind:variable	line:246
+moveLeft	../game.py	/^            moveLeft = True$/;"	kind:variable	line:244
+moveLeft	../game.py	/^    moveLeft = moveRight = moveUp = moveDown = False$/;"	kind:variable	line:218
+moveRight	../game.py	/^            moveRight = False$/;"	kind:variable	line:243
+moveRight	../game.py	/^            moveRight = True$/;"	kind:variable	line:247
+moveUp	../game.py	/^            moveUp = True$/;"	kind:variable	line:250
+newBaddie	../game.py	/^            newBaddie = {'rect': pygame.Rect(random.randint(140, 485), 0 - baddieSize, 23, 47),$/;"	kind:variable	line:272
+nosetests	../venv/bin/nosetests	1;"	kind:file	line:1
+nosetests-3.4	../venv/bin/nosetests-3.4	1;"	kind:file	line:1
+np	../game.py	/^import numpy as np$/;"	kind:namespace	line:25
+own_pos	../game.py	/^        own_pos = (playerRect.x, playerRect.y)$/;"	kind:variable	line:346
+pip	../venv/bin/pip	1;"	kind:file	line:1
+pip-compile	../venv/bin/pip-compile	1;"	kind:file	line:1
+pip-sync	../venv/bin/pip-sync	1;"	kind:file	line:1
+pip3	../venv/bin/pip3	1;"	kind:file	line:1
+pip3.7	../venv/bin/pip3.7	1;"	kind:file	line:1
+playerHasHitBaddie	../game.py	/^def playerHasHitBaddie(playerRect, baddies):$/;"	kind:function	line:162
+playerImage	../game.py	/^playerImage = pygame.image.load('image\/car1.png')$/;"	kind:variable	line:191
+playerRect	../game.py	/^playerRect = playerImage.get_rect()$/;"	kind:variable	line:194
+plt	../pong.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+points	../game.py	/^        points = calc_points(position_board, terminal)$/;"	kind:variable	line:347
+pong.py	../pong.py	1;"	kind:file	line:1
+position	../pong.py	/^position = 5, 325$/;"	kind:variable	line:13
+position_board	../game.py	/^    position_board = np.zeros((max_diff_x*2, max_diff_y*2), np.bool)$/;"	kind:variable	line:221
+pycodestyle	../venv/bin/pycodestyle	1;"	kind:file	line:1
+pygmentize	../venv/bin/pygmentize	1;"	kind:file	line:1
+pylint	../venv/bin/pylint	1;"	kind:file	line:1
+pyreverse	../venv/bin/pyreverse	1;"	kind:file	line:1
+readout_t	../game.py	/^            readout_t = model.predict(reshaped_state)$/;"	kind:variable	line:235
+relative_position	../game.py	/^            relative_position = (math.floor(relative_position[0]\/scale_down_factor), math.floor/;"	kind:variable	line:302
+relative_position	../game.py	/^            relative_position = (playerRect.center[0] - b["rect"].center[0], playerRect.center[1/;"	kind:variable	line:301
+replay	../game.py	/^def replay(batch_size):$/;"	kind:function	line:63
+ret	../game.py	/^        ret = np.empty((w, h, 3), dtype=np.uint8)$/;"	kind:variable	line:351
+sample	../game.py	/^sample = [car3,car4,baddieImage]$/;"	kind:variable	line:196
+saved_model_cli	../venv/bin/saved_model_cli	1;"	kind:file	line:1
+scale_down_factor	../game.py	/^scale_down_factor = 10$/;"	kind:variable	line:58
+score	../game.py	/^    score = 0$/;"	kind:variable	line:216
+screen	../pong.py	/^screen = pygame.display.set_mode((640, 480), 0, 32)$/;"	kind:variable	line:16
+sideLeft	../game.py	/^            sideLeft = {'rect': pygame.Rect(0, 0, 126, 600),$/;"	kind:variable	line:277
+sideRight	../game.py	/^            sideRight = {'rect': pygame.Rect(497, 0, 303, 600),$/;"	kind:variable	line:282
+surf	../game.py	/^        surf = pygame.surfarray.make_surface(ret)$/;"	kind:variable	line:353
+surfarray	../pong.py	/^import pygame.surfarray as surfarray$/;"	kind:namespace	line:10
+symilar	../venv/bin/symilar	1;"	kind:file	line:1
+t	../game.py	/^t=0$/;"	kind:variable	line:210
+tensorboard	../venv/bin/tensorboard	1;"	kind:file	line:1
+terminal	../game.py	/^            terminal = True$/;"	kind:variable	line:337
+terminal	../game.py	/^    terminal = False$/;"	kind:variable	line:220
+terminate	../game.py	/^def terminate():$/;"	kind:function	line:148
+tf	../game.py	/^import tensorflow as tf$/;"	kind:namespace	line:11
+tf_upgrade_v2	../venv/bin/tf_upgrade_v2	1;"	kind:file	line:1
+tflite_convert	../venv/bin/tflite_convert	1;"	kind:file	line:1
+toco	../venv/bin/toco	1;"	kind:file	line:1
+toco_from_protos	../venv/bin/toco_from_protos	1;"	kind:file	line:1
+topScore	../game.py	/^                topScore = score$/;"	kind:variable	line:342
+topScore	../game.py	/^topScore = int(v.readline())$/;"	kind:variable	line:207
+v	../game.py	/^v=open("data\/save.dat",'r')$/;"	kind:variable	line:206
+w	../game.py	/^        w, h = im.shape$/;"	kind:variable	line:350
+waitForPlayerToPressKey	../game.py	/^def waitForPlayerToPressKey():$/;"	kind:function	line:152
+wallLeft	../game.py	/^wallLeft = pygame.image.load('image\/left.png')$/;"	kind:variable	line:197
+wallRight	../game.py	/^wallRight = pygame.image.load('image\/right.png')$/;"	kind:variable	line:198
+wheel	../venv/bin/wheel	1;"	kind:file	line:1
+windowSurface	../game.py	/^windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))$/;"	kind:variable	line:177
+zero	../game.py	/^zero=0$/;"	kind:variable	line:201

@@ -1,0 +1,22 @@
+# For our program in machine learning
+keras
+tensorflow-gpu
+pillow
+pygame
+matplotlib
+opencv-python
+pydot # For model visualisation
+
+# For dev (code lint & auto format)
+autopep8
+pylint
+
+# For optimisation (robust design lecture)
+numpy
+scipy
+matplotlib
+ipython
+jupyter
+pandas
+sympy
+nose

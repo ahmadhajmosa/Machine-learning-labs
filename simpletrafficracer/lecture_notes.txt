@@ -1,0 +1,19 @@
+Project:
+
+Grundsätzlich:
+ * Enforment learning,
+oder
+ * imitation learning
+ * Or combine - start imitation and change later to reenforcement
+
+State design - choose of: 
+1) full image
+2) state space that detect cars. Feature engeneering. Image processing allowed! (smaller matrix => faster). Color of cars is important for the behavior
+3) Maybe hack the game engine to get the feature vector (cars). 
+
+Tipp: Use 4 images (historic) - 3 color channels. Use Keras as lib.
+
+What use as revard function?
+What use as the network architecture?
+
+Deadline: End of July
