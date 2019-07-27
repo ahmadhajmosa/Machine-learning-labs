@@ -1,0 +1,25 @@
+tensorflow-gpu>=2.0.0b1
+
+# dependency list from openai spinningup
+# http://spinningup.openai.com/en/latest/user/installation.html#installing-spinning-up
+gym[atari,box2d,classic_control]
+pillow
+pygame
+matplotlib
+opencv-python
+pydot # For model visualisation
+joblib
+seaborn
+tqdm
+#mpi4py
+
+# For dev (code lint & auto format)
+autopep8
+pylint
+
+numpy
+ipython
+
+# To save and restore models
+h5py
+pyyaml

@@ -3,10 +3,10 @@ from pygame.locals import *
 from matplotlib.pyplot import imshow
 from PIL import Image
 from io import StringIO
-import keras
-from keras.layers import Dense, Conv2D, MaxPool2D
-from keras.models import Sequential
-from keras.optimizers import Adam
+from tensorflow.compat.v1 import keras
+from tensorflow.compat.v1.keras.layers import Dense, Conv2D, MaxPool2D
+from tensorflow.compat.v1.keras.models import Sequential
+from tensorflow.compat.v1.keras.optimizers import Adam
 from collections import deque
 import tensorflow as tf
 import cv2
@@ -18,10 +18,9 @@ import resource
 #os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout, Flatten, \
+from tensorflow.compat.v1.keras.models import Sequential
+from tensorflow.compat.v1.keras.layers import Dense, Activation, Dropout, Flatten, \
     Conv2D, MaxPooling2D
-from keras.layers.normalization import BatchNormalization
 import numpy as np
 
 # Safty first!
@@ -112,7 +111,6 @@ def build_model():
     # Pooling
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
     # Batch Normalisation before passing it to the next layer
-    model.add(BatchNormalization())
 
     # 2nd Convolutional Layer
     model.add(Conv2D(filters=100, kernel_size=(8, 8), strides=(1, 1), padding='valid'))
@@ -120,7 +118,6 @@ def build_model():
     # Pooling
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
     # Batch Normalisation
-    model.add(BatchNormalization())
 
     # Passing it to a dense layer
     model.add(Flatten())
@@ -130,7 +127,6 @@ def build_model():
     # Add Dropout to prevent overfitting
     model.add(Dropout(0.4))
     # Batch Normalisation
-    model.add(BatchNormalization())
 
 
     # Output Layer
@@ -138,8 +134,8 @@ def build_model():
 
     model.compile(loss='mse',
                   optimizer=Adam(lr=0.001))
-    keras.utils.plot_model(model, to_file="model.png")
-    keras.utils.plot_model(model, to_file="model_with_shapes.png", show_shapes=True)
+    #keras.utils.plot_model(model, to_file="model.png")
+    #keras.utils.plot_model(model, to_file="model_with_shapes.png", show_shapes=True)
     return model
 
 model = build_model()
