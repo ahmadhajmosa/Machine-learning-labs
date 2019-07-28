@@ -9,6 +9,11 @@ from tqdm import tqdm
 print("Tensorflow version:", tf.__version__)
 print("Keras version:", tf.keras.__version__)
 
+def named_logs(model, logs):
+    result = {}
+    for l in zip(model.metrics_names, logs):
+         result[l[0]] = l[1]
+    return result
 
 class ProbabilityDistribution(tf.keras.Model):
     def call(self, logits):
@@ -55,7 +60,17 @@ class A2CAgent:
             loss=[self._logits_loss, self._value_loss]
         )
     
-    def train(self, env, batch_sz=64, updates=1000):
+    def train(self, env, batch_sz=90, updates=3000):
+        # for tensor board
+        tensorboard = tf.keras.callbacks.TensorBoard(
+            log_dir='/tmp/my_tf_logs',
+            histogram_freq=0,
+            batch_size=batch_sz,
+            write_graph=True,
+            write_grads=True
+        )
+        tensorboard.set_model(self.model)
+
         # storage helpers for a single batch of data
         actions = np.empty((batch_sz,), dtype=np.int32)
         rewards, dones, values = np.empty((3, batch_sz))
@@ -81,6 +96,8 @@ class A2CAgent:
             # performs a full training step on the collected batch
             # note: no need to mess around with gradients, Keras API handles it
             losses = self.model.train_on_batch(observations, [acts_and_advs, returns])
+            tensorboard.on_epoch_end(update, named_logs(self.model, losses))
+        tensorboard.on_train_end(None)
         return ep_rews
 
     def _returns_advantages(self, rewards, dones, values, next_value):
@@ -125,7 +142,7 @@ class A2CAgent:
         return policy_loss - self.params['entropy']*entropy_loss
 
 
-env = gym.make('CartPole-v0')
+env = gym.make('CartPole-v1')
 model = Model(num_actions=env.action_space.n)
 
 #obs = env.reset()
