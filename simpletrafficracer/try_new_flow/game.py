@@ -2,7 +2,6 @@ import pygame
 import random
 import sys
 import os
-import time
 from pygame.locals import *
 from matplotlib.pyplot import imshow
 from PIL import Image
@@ -193,8 +192,13 @@ class GameDing:
         self.baddies = []
         # model.save(f"models/model_t{t:08}.h5")
         self.score = 0
-        self.playerRect.topleft = (
-            self.WINDOWWIDTH / 2, self.WINDOWHEIGHT - 50)
+        left = self.WINDOWWIDTH / 2 - 120
+        top = self.WINDOWHEIGHT - 90
+        left_range = 80
+        left_random = random.randint(-left_range, left_range)
+        top_range = 40
+        top_random = random.randint(-top_range, top_range)
+        self.playerRect.topleft = (left + left_random, top + top_random)
         self.moveLeft = self.moveRight = self.moveUp = self.moveDown = False
         self.baddieAddCounter = 0
         self.terminal = False

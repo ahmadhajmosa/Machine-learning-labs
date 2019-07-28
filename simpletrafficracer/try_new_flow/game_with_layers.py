@@ -18,7 +18,7 @@ class ProbabilityDistribution(tf.keras.Model):
 
 
 def build_model(shape, export_graphstructue=True):
-    # shape0xshape1 Gray images
+    # shape0 x shape1 Gray images
     input_layer = tf.keras.Input(
         shape=(shape[0], shape[1]), dtype="float16", name="input_layer")
     reshaped = kl.Reshape(target_shape=(
