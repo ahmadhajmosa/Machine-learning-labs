@@ -1,6 +1,7 @@
 import pygame, random, sys ,os,time
 from pygame.locals import *
 from matplotlib.pyplot import imshow
+import matplotlib.pyplot as plt
 from PIL import Image
 from io import StringIO
 import keras
@@ -20,7 +21,7 @@ WINDOWWIDTH = 800
 WINDOWHEIGHT = 600
 TEXTCOLOR = (255, 255, 255)
 BACKGROUNDCOLOR = (0, 0, 0)
-FPS = 40
+FPS = 100
 BADDIEMINSIZE = 10
 BADDIEMAXSIZE = 40
 BADDIEMINSPEED = 8
@@ -29,7 +30,7 @@ ADDNEWBADDIERATE = 6
 PLAYERMOVERATE = 5
 count=3
 REPLAY_MEMORY=10000
-OBSERVE = 5000. # timesteps to observe before training
+OBSERVE = 100. # timesteps to observe before training
 EXPLORE = 5000. # frames over which to anneal epsilon
 ACTIONS=4
 memory = deque(maxlen=2000)
@@ -54,11 +55,11 @@ def replay(batch_size):
             target = reward
             if not done:
               target = reward + gamma * \
-                       np.amax(model.predict(np.reshape(next_state,(1,80,80,12)))[0])
+                       np.amax(model.predict(np.reshape(next_state,(1,80,80,4)))[0])
 
-            target_f = model.predict(np.reshape(state,(1,80,80,12)))
+            target_f = model.predict(np.reshape(state,(1,80,80,4)), verbose=0)
             target_f[0][action] = target
-            model.fit(np.reshape(state,(1,80,80,12)), target_f, epochs=1, verbose=0)
+            model.fit(np.reshape(state,(1,80,80,4)), target_f, epochs=1, verbose=1)
 
 
 # build convnet
@@ -68,7 +69,7 @@ def build_model():
     # (1) Importing dependency
     import keras
 
-    np.random.seed(1000)
+    #np.random.seed(1000)
 
     # (2) Get Data
 
@@ -76,7 +77,7 @@ def build_model():
     model = Sequential()
 
     # 1st Convolutional Layer
-    model.add(Conv2D(filters=32, input_shape=(80, 80, 4*3), kernel_size=(8, 8), \
+    model.add(Conv2D(filters=32, input_shape=(80, 80, 4), kernel_size=(8, 8), \
                      strides=(4, 4), padding='valid'))
     model.add(Activation('relu'))
     # Pooling
@@ -108,12 +109,17 @@ def build_model():
 
     # Output Layer
     model.add(Dense(ACTIONS))
+    model.add(Activation('softmax'))
 
     model.compile(loss='mse',
-                  optimizer=Adam(lr=0.001))
+                  optimizer=Adam(lr=0.00001))
     return model
 
 model = build_model()
+
+# Load model for imitation learning
+#model.load_weights('imitation_model_1.h5')
+#model.load_weights('model.h5')
 # game termination
 
 def terminate():
@@ -141,6 +147,11 @@ def drawText(text, font, surface, x, y):
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
+
+def loadModel():
+    model.load('my_model.h5')
+def saveModel():
+    model.save('my_model.h5')
 
 # set up pygame, the window, and the mouse cursor
 pygame.init()
@@ -194,36 +205,79 @@ while (count>0):
     reverseCheat = slowCheat = False
     baddieAddCounter = 0
     terminal = False
+    action_index = 0
     while True: # the game loop
         score += 1 # increase score
 
 
-        mainClock.tick(FPS)
+        mainClock.tick()
 
         x_t = pygame.surfarray.array3d(pygame.display.get_surface())
-        x_t = x_t.reshape((600, 800, 3))
-        x_t = cv2.resize(x_t, (80, 80))
+#        cv2.imshow('Test1',x_t)
+        x_t_gray = cv2.cvtColor(x_t,cv2.COLOR_BGR2GRAY)
+#        cv2.imshow('Show image before removing borders',x_t_gray)
+        # Remove the borders of the game, just keeping one small line on the side
+        x_t_gray[:120,:]=0
+        x_t_gray[505:,:]=0
+#        cv2.imshow('Show image after removing borders',x_t_gray)
+        # Perform image thresholding converting the image to a binary image
+        retval,x_t_gray = cv2.threshold(x_t_gray,1,255,cv2.THRESH_BINARY)
+        #original reshape should rotate the picture but did not work
+#        cv2.imshow('Show image after binary threshold',x_t_gray)
+        #Now change color value of the player itself to differ from enemies
+        x_t_gray[playerRect.left:playerRect.right,playerRect.top:playerRect.bottom]=100
+        # Make image cubed so that it can be reshaped to 80x80
+        a = np.zeros((800,200),dtype=np.uint8)
+        x_t_gray=np.hstack((x_t_gray,a))
+        cv2.imshow('Show image after changing color of player',x_t_gray)
+#        x_t = cv2.resize(x_t_gray, (80, 80))
+        
+        x_t = x_t_gray[::10,::10]
+#        cv2.imshow('Test small',x_t)
         if t==0:
-            s_t = np.stack((x_t, x_t, x_t, x_t), axis=2).reshape(80,80,12)
+            s_t = np.stack((x_t, x_t, x_t, x_t)).reshape(80,80,4)
             s_t1 = s_t
         else:
-            x_t = np.reshape(x_t,(80,80,3))
-            s_t1 = np.append(x_t, s_t[:,:,0:9], axis = 2).reshape(80,80,12)
+            x_t = np.reshape(x_t,(80,80,1))
+            s_t = s_t1
+            s_t1 = np.append(x_t, s_t[:,:,0:3], axis=2).reshape(80,80,4)
 
 
         a_t = np.zeros([ACTIONS])
         action_index = 0
-        if random.random() <= epsilon or t <= OBSERVE:
+        if t <= OBSERVE:
             action_index = random.randrange(ACTIONS)
             a_t[action_index] = 1
         else:
-            readout_t = model.predict(np.reshape(s_t,(1,80,80,12)))
+            readout_t = model.predict(np.reshape(s_t,(1,80,80,4)))
             action_index = np.argmax(readout_t)
             a_t[action_index] = 1
 
         # scale down epsilon
         if epsilon > FINAL_EPSILON and t > OBSERVE:
             epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
+
+        for event in pygame.event.get():
+
+            if event.type == QUIT:
+                terminate()
+
+
+            # Brought to you by code-projects.org
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    model.save_weights('model.h5')
+                    terminate()
+#                if event.key == K_UP:
+#                    action_index = 2
+#                if event.key == K_DOWN:
+#                    action_index = 3
+#                if event.key == K_LEFT:
+#                    action_index = 0
+#                if event.key == K_RIGHT:
+#                    action_index = 1
+
+
         if action_index ==0:
             moveRight = False
             moveLeft = True
@@ -236,19 +290,7 @@ while (count>0):
         else:
             moveUp = False
             moveDown = True
-
-        for event in pygame.event.get():
-
-            if event.type == QUIT:
-                terminate()
-
-
-            # Brought to you by code-projects.org
-            if event.type == KEYUP:
-                if event.key == K_ESCAPE:
-                    terminate()
-
-
+            
         # Add new baddies at the top of the screen
         if not reverseCheat and not slowCheat:
             baddieAddCounter += 1
@@ -289,9 +331,12 @@ while (count>0):
             elif slowCheat:
                 b['rect'].move_ip(0, 1)
 
+
+        r_t = 0
         for b in baddies[:]:
             if b['rect'].top > WINDOWHEIGHT:
                 baddies.remove(b)
+                r_t = 1 # Reward when one baddie was passed
 
         # Draw the game world on the window.
         windowSurface.fill(BACKGROUNDCOLOR)
@@ -314,7 +359,7 @@ while (count>0):
         # Check if any of the car have hit the player.
         if playerHasHitBaddie(playerRect, baddies):
             terminal = True
-            r_t = -1
+            r_t = -1 # penalty for hitting baddie
             if score > topScore:
                 g = open("data/save.dat", 'w')
                 g.write(str(score))
@@ -324,8 +369,6 @@ while (count>0):
         else:
             terminal = False
 
-            r_t = 0
-
 
         memory.append((s_t, action_index, r_t, s_t1, terminal))
 
@@ -333,11 +376,14 @@ while (count>0):
             memory.popleft()
 
         if t > OBSERVE:
-            replay(64)
+            replay(32)
             if epsilon > epsilon_min:
                 epsilon *= epsilon_decay
             #D.append((s_t, a_t, r_t, s_t1, terminal))
         t+=1
+        
+#        if t % 5000 == 0:
+#            saveModel()
 
         print(t)
     # "Game Over" screen.
