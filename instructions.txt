@@ -1,0 +1,8 @@
+The data for trainign the model can be finded using the following links.
+The data must be unzipped and saved as .pkl before training.
+
+for export_batchX:
+https://drive.google.com/file/d/1jr8CrX0JvkchzhlSx5fNh1boEpXLjome/view?usp=sharing
+
+for export_batchY:
+https://drive.google.com/file/d/1gjKGkiRnj9gkob_HzEXMF41bWGV1RB1u/view?usp=sharing
