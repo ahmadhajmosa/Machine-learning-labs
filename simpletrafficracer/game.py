@@ -1,3 +1,6 @@
+
+#Julian_Blueml_01531146
+
 import pygame, random, sys ,os,time
 from pygame.locals import *
 from matplotlib.pyplot import imshow
