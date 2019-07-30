@@ -2,7 +2,7 @@ tensorflow-gpu>=2.0.0b1
 
 # dependency list from openai spinningup
 # http://spinningup.openai.com/en/latest/user/installation.html#installing-spinning-up
-gym[atari,box2d,classic_control]
+gym[classic_control]==0.10.11
 pillow
 pygame
 matplotlib
@@ -10,8 +10,9 @@ opencv-python
 pydot # For model visualisation
 joblib
 seaborn
-tqdm
+tqdm # progress bar lib. Cool for training speed viz
 #mpi4py
+tf-agents-nightly
 
 # For dev (code lint & auto format)
 autopep8

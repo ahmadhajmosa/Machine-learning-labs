@@ -6,12 +6,7 @@ from pygame.locals import *
 from matplotlib.pyplot import imshow
 from PIL import Image
 from io import StringIO
-from tensorflow.keras.layers import Dense, Conv2D, MaxPool2D
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import TensorBoard
 from collections import deque
-import tensorflow as tf
 import cv2
 import math
 import resource
@@ -21,95 +16,8 @@ from enum import Enum
 #   so it doesn't need a windowing system.
 #os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Dropout, Flatten, \
-    Conv2D, MaxPooling2D, BatchNormalization
-from tensorflow import keras
 import numpy as np
 
-
-# reinforce
-# def replay(batch_size):
-#        minibatch = random.sample(memory, batch_size)
-#        for state, own_pos, action, done, points in minibatch:
-#            target = points
-#            reshaped_state = np.reshape(state, (1, max_diff_x*2, max_diff_y*2, 1))
-#            target_f = model.predict(reshaped_state)
-#            target_f[0][action] = target
-#            model.fit(reshaped_state, target_f, epochs=1, verbose=0)
-#
-# def calc_points(state, done):
-#    target = 0
-#    found_points = 0
-#    objects = np.nonzero(state)
-#    for i in range(len(objects[0])):
-#        idx_x = objects[0][i]
-#        idx_y = objects[1][i]
-#        current = state[idx_x, idx_y]
-#        if current == True:
-#            x = idx_x-max_diff_x
-#            y = idx_y-max_diff_y
-#            distance = (np.sqrt(x**2+y**2)-1)/10
-#            print(distance)
-#            target -= 1/distance
-#            found_points += 1
-#    if done == True:
-#        target = -2
-#        return target
-#    if found_points == 0:
-#        target = 0
-#        return target
-#    target /= found_points
-#    return target
-
-# build convnet
-# def build_model():
-#    # Neural Net for Deep-Q learning Model
-#
-#    #np.random.seed(1000)
-#
-#    # (2) Get Data
-#
-#    # (3) Create a sequential model
-#    model = Sequential()
-#
-#    # 1st Convolutional Layer
-#    model.add(Conv2D(filters=32, input_shape=(max_diff_x*2, max_diff_y*2, 1), kernel_size=(8, 8), \
-#                     strides=(4, 4), padding='valid'))
-#    model.add(Activation('relu'))
-#    # Pooling
-#    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
-#    # Batch Normalisation before passing it to the next layer
-#    model.add(BatchNormalization())
-#
-#    # 2nd Convolutional Layer
-#    model.add(Conv2D(filters=100, kernel_size=(8, 8), strides=(1, 1), padding='valid'))
-#    model.add(Activation('relu'))
-#    # Pooling
-#    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
-#    # Batch Normalisation
-#    model.add(BatchNormalization())
-#
-#    # Passing it to a dense layer
-#    model.add(Flatten())
-#    # 1st Dense Layer
-#    model.add(Dense(1000))
-#    model.add(Activation('relu'))
-#    # Add Dropout to prevent overfitting
-#    model.add(Dropout(0.4))
-#    # Batch Normalisation
-#    model.add(BatchNormalization())
-#
-#
-#    # Output Layer
-#    model.add(Dense(ACTIONS))
-#
-#    model.compile(loss='mse',
-#                  optimizer=Adam(lr=0.001))
-#    keras.utils.plot_model(model, to_file="model.png")
-#    keras.utils.plot_model(model, to_file="model_with_shapes.png", show_shapes=True)
-#    return model
 
 class FrontBack(Enum):
     FORWARD = 1
@@ -126,7 +34,8 @@ class LeftRight(Enum):
 class GameDing:
     TOPSCORE_FILE = "data/save.dat"
 
-    def __init__(self):
+    def __init__(self, debug_print=False):
+        self.debug_print = debug_print
         # "Settings"
         self.WINDOWWIDTH = 800
         self.WINDOWHEIGHT = 600
@@ -137,11 +46,6 @@ class GameDing:
         self.BADDIEMAXSPEED = 8
         self.ADDNEWBADDIERATE = 6
         self.PLAYERMOVERATE = 5
-        self.REPLAY_MEMORY = 10000  # Images to save for replay
-        self.OBSERVE = 5000.  # timesteps to observe before training
-        self.EXPLORE = 5000.  # frames over which to anneal epsilon
-        self.ACTIONS = 4
-        self.memory = deque(maxlen=self.REPLAY_MEMORY)
         self.gamma = 0.95  # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
@@ -187,7 +91,7 @@ class GameDing:
         # Set all resetable states
         self.reset()
 
-    # Reset state for a new round
+    # Reset state for a new round + let it run a bit to init field
     def reset(self):
         self.baddies = []
         # model.save(f"models/model_t{t:08}.h5")
@@ -202,8 +106,19 @@ class GameDing:
         self.moveLeft = self.moveRight = self.moveUp = self.moveDown = False
         self.baddieAddCounter = 0
         self.terminal = False
+        self.observation = {
+            "mini_image": None,
+            "discrete_image": None,
+            "own_pos": None,
+            "action": (LeftRight.NEUTRAL, FrontBack.NEUTRAL),
+            "dead": False,
+            "score": 0,
+        }
         self.position_board = np.zeros(
             (self.max_diff_x*2, self.max_diff_y*2), np.bool)
+        self.position_list = np.zeros((40,2), dtype=np.int32)
+        for _ in range(7):
+            self.next_round(LeftRight.NEUTRAL, FrontBack.NEUTRAL)
 
     # game termination
     def _terminate(self):
@@ -294,10 +209,12 @@ class GameDing:
             self.playerRect.move_ip(0, self.PLAYERMOVERATE)
 
         self.position_board.fill(False)
-        for b in self.baddies:
+        self.position_list.fill(0)
+        for i,b in enumerate(self.baddies):
             b['rect'].move_ip(0, b['speed'])
             relative_position = (
                 self.playerRect.center[0] - b["rect"].center[0], self.playerRect.center[1] - b["rect"].center[1])
+            self.position_list[i] = relative_position
             relative_position = (math.floor(
                 relative_position[0]/self.scale_down_factor), math.floor(relative_position[1]/self.scale_down_factor))
             if abs(relative_position[0]) > self.max_diff_x:
@@ -348,7 +265,7 @@ class GameDing:
 
         own_pos = (self.playerRect.x, self.playerRect.y)
 
-        # Divide with max value. Bool => 1
+        # Divide with max value. Bool ==> 1
         im = 255 * (self.position_board / 1)
         w, h = im.shape
         ret = np.empty((w, h, 3), dtype=np.uint8)
@@ -357,14 +274,19 @@ class GameDing:
         self.windowSurface.blit(surf, (0, 0))
         pygame.display.update()
 
-        print("own pos:", own_pos, "Len:", len(self.baddies),
-              "terminal:", self.terminal, "score:", self.score)
+        if self.debug_print:
+            print("own pos:", own_pos, "Len:", len(self.baddies),
+                "terminal:", self.terminal, "score:", self.score)
         if self.score != 0:
-            self.memory.append(
-                (im, own_pos, (direction, gas), self.terminal, self.score))
-
-        while len(self.memory) > self.REPLAY_MEMORY:
-            self.memory.popleft()
+            self.observation = {
+                "mini_image": im,
+                "discrete_image": np.array(self.position_board, dtype=np.uint8),
+                "own_pos": own_pos,
+                "action": (direction, gas),
+                "dead": self.terminal,
+                "score": self.score,
+                "position_vectors": self.position_list
+            }
 
         self.t += 1
 
@@ -374,4 +296,7 @@ class GameDing:
         return self.terminal
 
     def get_last_memory_image(self):
-        return self.memory[-1][0]
+        return self.observation["mini_image"]
+    
+    def get_last_logic_state(self):
+        return self.observation["discrete_image"]
