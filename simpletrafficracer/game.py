@@ -30,7 +30,7 @@ ADDNEWBADDIERATE = 6
 PLAYERMOVERATE = 5
 count=3
 REPLAY_MEMORY=10000
-OBSERVE = 100. # timesteps to observe before training
+OBSERVE = 5000. # timesteps to observe before training
 EXPLORE = 5000. # frames over which to anneal epsilon
 ACTIONS=4
 memory = deque(maxlen=2000)
@@ -59,7 +59,7 @@ def replay(batch_size):
 
             target_f = model.predict(np.reshape(state,(1,80,80,4)), verbose=0)
             target_f[0][action] = target
-            model.fit(np.reshape(state,(1,80,80,4)), target_f, epochs=1, verbose=1)
+            model.fit(np.reshape(state,(1,80,80,4)), target_f, epochs=4, verbose=1)
 
 
 # build convnet
@@ -118,7 +118,7 @@ def build_model():
 model = build_model()
 
 # Load model for imitation learning
-#model.load_weights('imitation_model_1.h5')
+model.load_weights('model.h5')
 #model.load_weights('model.h5')
 # game termination
 
