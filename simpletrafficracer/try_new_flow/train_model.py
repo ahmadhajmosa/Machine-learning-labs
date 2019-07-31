@@ -1,3 +1,7 @@
+"""
+Implementation using TF Agents
+A official tensorflow package. See https://github.com/tensorflow/agents
+"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -17,11 +21,11 @@ from tf_agents.environments import utils
 from tf_agents.specs import array_spec
 from tf_agents.environments import wrappers
 from tf_agents.trajectories import time_step as ts
+from tf_agents.policies import policy_saver
 
 from tf_agents.agents.dqn import dqn_agent
 from tf_agents.agents.td3 import td3_agent
 from tf_agents.drivers import dynamic_step_driver
-from tf_agents.environments import suite_gym
 from tf_agents.environments import tf_py_environment
 from tf_agents.eval import metric_utils
 from tf_agents.metrics import tf_metrics
@@ -57,24 +61,7 @@ log_interval = 200  # @param
 num_eval_episodes = 10  # @param
 eval_interval = 1000  # @param
 
-root_dir = "logs/"
-
-# Setup dirs & tensor board
-summaries_flush_secs = 10
-root_dir = os.path.expanduser(root_dir)
-train_dir = os.path.join(root_dir, 'train')
-eval_dir = os.path.join(root_dir, 'eval')
-
-train_summary_writer = tf.compat.v2.summary.create_file_writer(
-    train_dir, flush_millis=summaries_flush_secs * 1000)
-#train_summary_writer.set_as_default()
-
-eval_summary_writer = tf.compat.v2.summary.create_file_writer(
-    eval_dir, flush_millis=summaries_flush_secs * 1000)
-eval_metrics = [
-    py_metrics.AverageReturnMetric(buffer_size=num_eval_episodes),
-    py_metrics.AverageEpisodeLengthMetric(buffer_size=num_eval_episodes),
-]
+model_path = "model/model_round_%05d.h5"
 
 # init
 env = RaceGameEnv()
@@ -137,6 +124,9 @@ eval_policy = tf_agent.policy
 collect_policy = tf_agent.collect_policy
 random_policy = random_tf_policy.RandomTFPolicy(
     train_env.time_step_spec(), train_env.action_spec())
+
+# Model saver
+saver = policy_saver.PolicySaver(tf_agent.policy)
 
 # Metrics and Evaluation
 
@@ -224,6 +214,7 @@ for _ in range(num_iterations):
             eval_env, tf_agent.policy, num_eval_episodes)
         print('step = {0}: Average Return = {1}'.format(step, avg_return))
         returns.append(avg_return)
+        saver.save(model_path % step)
 
 # Plots
 steps = range(0, num_iterations + 1, eval_interval)

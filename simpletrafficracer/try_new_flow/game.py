@@ -1,3 +1,7 @@
+"""
+The game itself.
+The given base code is modified to use classes. So we can encapsulate it later.
+"""
 import pygame
 import random
 import sys

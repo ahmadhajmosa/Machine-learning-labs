@@ -3,3 +3,4 @@ models
 __pycache__
 model_plot.png
 save.dat
+model_round_*.h5

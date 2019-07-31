@@ -1,3 +1,9 @@
+"""
+Adapter from our custom game interface to the standard tensorflow environment interface.
+
+Run this script to start it with a random-agent. Just to check if the adapter is working
+"""
+
 import numpy as np
 from tf_agents.environments import py_environment
 from tf_agents.specs import array_spec

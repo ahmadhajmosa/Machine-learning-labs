@@ -1,3 +1,7 @@
+"""
+Test our game with classes implementation.
+Just do some random actions.
+"""
 from game import GameDing, LeftRight, FrontBack
 import time
 import random

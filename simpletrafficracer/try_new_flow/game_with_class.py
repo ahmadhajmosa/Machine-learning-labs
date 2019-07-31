@@ -1,3 +1,7 @@
+"""
+Failed ansatz to program with tensorflow against our custom game interface
+"""
+
 from game import GameDing, LeftRight, FrontBack
 import numpy as np
 import tensorflow as tf

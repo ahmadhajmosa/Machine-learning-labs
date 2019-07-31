@@ -2,23 +2,19 @@ tensorflow-gpu>=2.0.0b1
 
 # dependency list from openai spinningup
 # http://spinningup.openai.com/en/latest/user/installation.html#installing-spinning-up
-gym[classic_control]==0.10.11
+#gym[classic_control]==0.10.11
 pillow
 pygame
 matplotlib
 opencv-python
-pydot # For model visualisation
-joblib
-seaborn
+pydot # For model visualisation (tensorflow to png)
 tqdm # progress bar lib. Cool for training speed viz
-#mpi4py
 tf-agents-nightly
+numpy
 
 # For dev (code lint & auto format)
 autopep8
 pylint
-
-numpy
 ipython
 
 # To save and restore models
